@@ -6,6 +6,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Comentario, Tema } from '../../core/models/foro.model';
 import { AuthService } from '../../core/services/auth.service';
 import { ForoService } from '../../core/services/foro.service';
+import { ModeracionService } from '../../core/services/moderacion.service';
 
 @Component({
   selector: 'app-tema-detalle',
@@ -17,6 +18,7 @@ export class TemaDetalle implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly foro = inject(ForoService);
+  private readonly moderacion = inject(ModeracionService);
   protected readonly auth = inject(AuthService);
 
   protected readonly tema = signal<Tema | null>(null);
@@ -105,6 +107,32 @@ export class TemaDetalle implements OnInit {
     this.foro.eliminarComentario(id).subscribe({
       next: () => this.cargarComentarios(),
       error: () => this.actionError.set('No se pudo eliminar el comentario.'),
+    });
+  }
+
+  protected banearTema(): void {
+    if (!confirm('¿Banear este tema? Dejará de verse en el foro público.')) {
+      return;
+    }
+    this.actionError.set(null);
+    this.moderacion.banearTema(this.temaId).subscribe({
+      next: () => {
+        const catId = this.tema()?.categoria?.id;
+        void this.router.navigate(catId ? ['/categorias', catId] : ['/inicio']);
+      },
+      error: () => this.actionError.set('No se pudo banear el tema. ¿Está corriendo ms-moderacion?'),
+    });
+  }
+
+  protected banearComentario(id: number): void {
+    if (!confirm('¿Banear este comentario? Dejará de verse en el foro público.')) {
+      return;
+    }
+    this.actionError.set(null);
+    this.moderacion.banearComentario(id).subscribe({
+      next: () => this.cargarComentarios(),
+      error: () =>
+        this.actionError.set('No se pudo banear el comentario. ¿Está corriendo ms-moderacion?'),
     });
   }
 
