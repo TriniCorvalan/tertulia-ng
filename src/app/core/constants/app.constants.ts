@@ -1,3 +1,2 @@
-/** Constantes de aplicación Tertulia (datos mock / sesión en pasos siguientes). */
+/** Constantes de aplicación Tertulia. */
 export const APP_NAME = 'Tertulia';
-export const SESSION_USER_KEY = 'tertulia_usuario';
