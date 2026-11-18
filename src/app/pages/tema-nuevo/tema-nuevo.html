@@ -1,6 +1,46 @@
 <section class="row justify-content-center">
   <div class="col-12 col-md-10 col-lg-8">
-    <h1 class="h3 mb-3">Publicar tema</h1>
-    <p class="text-secondary">Formulario en un paso siguiente.</p>
+    <a routerLink="/inicio" class="small text-decoration-none">&larr; Inicio</a>
+    <h1 class="h3 mt-2 mb-3">Publicar tema</h1>
+
+    @if (error()) {
+      <div class="alert alert-danger" role="alert">{{ error() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="mb-3">
+        <label class="form-label" for="categoriaId">Categoría</label>
+        <select id="categoriaId" class="form-select" formControlName="categoriaId">
+          @for (cat of categorias(); track cat.id) {
+            <option [value]="cat.id">{{ cat.nombre }}</option>
+          }
+        </select>
+        @if (form.controls.categoriaId.invalid && form.controls.categoriaId.touched) {
+          <div class="form-text text-danger">Elige una categoría.</div>
+        }
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="titulo">Título</label>
+        <input id="titulo" type="text" class="form-control" formControlName="titulo" />
+        @if (form.controls.titulo.invalid && form.controls.titulo.touched) {
+          <div class="form-text text-danger">Título de 3 a 200 caracteres.</div>
+        }
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="contenido">Contenido</label>
+        <textarea
+          id="contenido"
+          class="form-control"
+          rows="6"
+          formControlName="contenido"
+        ></textarea>
+        @if (form.controls.contenido.invalid && form.controls.contenido.touched) {
+          <div class="form-text text-danger">Escribe al menos 5 caracteres.</div>
+        }
+      </div>
+      <button class="btn btn-dark" type="submit" [disabled]="submitting()">
+        {{ submitting() ? 'Publicando…' : 'Publicar' }}
+      </button>
+    </form>
   </div>
 </section>

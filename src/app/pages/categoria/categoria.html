@@ -1,4 +1,49 @@
-<section>
-  <h1 class="h3 mb-3">Categoría</h1>
-  <p class="text-secondary">Listado de temas en un paso siguiente.</p>
+<section class="row g-3">
+  <div class="col-12">
+    <a routerLink="/inicio" class="small text-decoration-none">&larr; Categorías</a>
+    @if (categoria(); as cat) {
+      <h1 class="h3 mt-2 mb-1">{{ cat.nombre }}</h1>
+      <p class="text-secondary">{{ cat.descripcion }}</p>
+    }
+  </div>
+
+  <div class="col-12 col-lg-8">
+    <form class="row g-2 align-items-end mb-3" [formGroup]="searchForm" (ngSubmit)="buscar()">
+      <div class="col-12 col-md-8">
+        <label class="form-label" for="q">Buscar temas</label>
+        <input id="q" type="search" class="form-control" formControlName="q" placeholder="Palabra clave" />
+      </div>
+      <div class="col-12 col-md-4 d-flex gap-2">
+        <button class="btn btn-outline-dark" type="submit">Buscar</button>
+        @if (auth.isAuthenticated()) {
+          <a class="btn btn-dark" [routerLink]="['/temas/nuevo']" [queryParams]="{ categoriaId: categoria()?.id }"
+            >Publicar</a
+          >
+        }
+      </div>
+    </form>
+
+    @if (loading()) {
+      <p class="text-secondary">Cargando temas…</p>
+    } @else if (error()) {
+      <div class="alert alert-warning" role="alert">{{ error() }}</div>
+    } @else {
+      <ul class="list-group list-group-flush">
+        @for (tema of temas(); track tema.id) {
+          <li class="list-group-item px-0">
+            <a class="text-decoration-none" [routerLink]="['/temas', tema.id]">
+              <span class="fw-semibold text-body">{{ tema.titulo }}</span>
+            </a>
+            <div class="small text-secondary">
+              {{ autorLabel(tema.usuarioId) }}
+              ·
+              {{ tema.fechaCreacion | date: 'short' }}
+            </div>
+          </li>
+        } @empty {
+          <li class="list-group-item px-0 text-secondary">No hay temas en esta categoría.</li>
+        }
+      </ul>
+    }
+  </div>
 </section>
