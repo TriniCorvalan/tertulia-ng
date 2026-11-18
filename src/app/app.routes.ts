@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 
+import { adminGuard } from './core/guards/admin.guard';
 import { authGuard } from './core/guards/auth.guard';
+import { AdminModeracion } from './pages/admin-moderacion/admin-moderacion';
 import { Categoria } from './pages/categoria/categoria';
 import { Home } from './pages/home/home';
 import { Login } from './pages/login/login';
@@ -20,5 +22,7 @@ export const routes: Routes = [
   { path: 'categorias/:id', component: Categoria },
   { path: 'temas/nuevo', component: TemaNuevo, canActivate: [authGuard] },
   { path: 'temas/:id', component: TemaDetalle },
+  { path: 'admin/moderacion', component: AdminModeracion, canActivate: [adminGuard] },
   { path: '**', redirectTo: 'inicio' },
 ];
+

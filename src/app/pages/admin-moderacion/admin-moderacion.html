@@ -1,0 +1,190 @@
+<section class="row g-3">
+  <div class="col-12">
+    <h1 class="h3 mb-1">Moderación</h1>
+    <p class="text-secondary mb-0">Banear o restaurar contenido que incumple las normas del foro.</p>
+  </div>
+
+  <div class="col-12 d-flex flex-wrap gap-2">
+    <button
+      type="button"
+      class="btn btn-sm"
+      [class.btn-dark]="tab() === 'temas'"
+      [class.btn-outline-dark]="tab() !== 'temas'"
+      (click)="setTab('temas')"
+    >
+      Temas
+    </button>
+    <button
+      type="button"
+      class="btn btn-sm"
+      [class.btn-dark]="tab() === 'comentarios'"
+      [class.btn-outline-dark]="tab() !== 'comentarios'"
+      (click)="setTab('comentarios')"
+    >
+      Comentarios
+    </button>
+  </div>
+
+  <div class="col-12 d-flex flex-wrap gap-2">
+    <button
+      type="button"
+      class="btn btn-sm"
+      [class.btn-secondary]="filtro() === ''"
+      [class.btn-outline-secondary]="filtro() !== ''"
+      (click)="setFiltro('')"
+    >
+      Todos
+    </button>
+    <button
+      type="button"
+      class="btn btn-sm"
+      [class.btn-secondary]="filtro() === 'ACTIVO'"
+      [class.btn-outline-secondary]="filtro() !== 'ACTIVO'"
+      (click)="setFiltro('ACTIVO')"
+    >
+      Activos
+    </button>
+    <button
+      type="button"
+      class="btn btn-sm"
+      [class.btn-secondary]="filtro() === 'BANEADO'"
+      [class.btn-outline-secondary]="filtro() !== 'BANEADO'"
+      (click)="setFiltro('BANEADO')"
+    >
+      Baneados
+    </button>
+  </div>
+
+  @if (error()) {
+    <div class="col-12">
+      <div class="alert alert-danger mb-0" role="alert">{{ error() }}</div>
+    </div>
+  }
+
+  <div class="col-12">
+    @if (loading()) {
+      <p class="text-secondary mb-0">Cargando…</p>
+    } @else if (tab() === 'temas') {
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Título</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Fecha</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (tema of temas(); track tema.id) {
+              <tr>
+                <td>{{ tema.id }}</td>
+                <td>
+                  <div class="fw-semibold">{{ tema.titulo }}</div>
+                  <div class="small text-secondary text-truncate" style="max-width: 28rem">
+                    {{ tema.contenido }}
+                  </div>
+                </td>
+                <td>
+                  <span
+                    class="badge"
+                    [class.text-bg-success]="tema.estado === 'ACTIVO'"
+                    [class.text-bg-danger]="tema.estado === 'BANEADO'"
+                    >{{ tema.estado }}</span
+                  >
+                </td>
+                <td class="small text-secondary">{{ tema.fechaCreacion | date: 'short' }}</td>
+                <td class="text-end">
+                  @if (tema.estado === 'ACTIVO') {
+                    <button
+                      class="btn btn-outline-danger btn-sm"
+                      type="button"
+                      [disabled]="busyId() === 'tema-' + tema.id"
+                      (click)="banearTema(tema.id)"
+                    >
+                      Banear
+                    </button>
+                  } @else {
+                    <button
+                      class="btn btn-outline-success btn-sm"
+                      type="button"
+                      [disabled]="busyId() === 'tema-' + tema.id"
+                      (click)="desbanearTema(tema.id)"
+                    >
+                      Desbanear
+                    </button>
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5" class="text-secondary">No hay temas para este filtro.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Comentario</th>
+              <th scope="col">Tema</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Fecha</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of comentarios(); track c.id) {
+              <tr>
+                <td>{{ c.id }}</td>
+                <td>
+                  <div class="small text-truncate" style="max-width: 24rem">{{ c.contenido }}</div>
+                </td>
+                <td>#{{ c.temaId }}</td>
+                <td>
+                  <span
+                    class="badge"
+                    [class.text-bg-success]="c.estado === 'ACTIVO'"
+                    [class.text-bg-danger]="c.estado === 'BANEADO'"
+                    >{{ c.estado }}</span
+                  >
+                </td>
+                <td class="small text-secondary">{{ c.fechaCreacion | date: 'short' }}</td>
+                <td class="text-end">
+                  @if (c.estado === 'ACTIVO') {
+                    <button
+                      class="btn btn-outline-danger btn-sm"
+                      type="button"
+                      [disabled]="busyId() === 'comentario-' + c.id"
+                      (click)="banearComentario(c.id)"
+                    >
+                      Banear
+                    </button>
+                  } @else {
+                    <button
+                      class="btn btn-outline-success btn-sm"
+                      type="button"
+                      [disabled]="busyId() === 'comentario-' + c.id"
+                      (click)="desbanearComentario(c.id)"
+                    >
+                      Desbanear
+                    </button>
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="text-secondary">No hay comentarios para este filtro.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</section>

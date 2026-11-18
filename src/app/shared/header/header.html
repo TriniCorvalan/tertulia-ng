@@ -24,6 +24,13 @@
           <li class="nav-item">
             <a class="nav-link" routerLink="/perfil" routerLinkActive="active">Perfil</a>
           </li>
+          @if (auth.isAdmin()) {
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/admin/moderacion" routerLinkActive="active"
+                >Moderación</a
+              >
+            </li>
+          }
           <li class="nav-item">
             <span class="navbar-text small text-secondary me-2">{{
               auth.currentUser()?.nombre
