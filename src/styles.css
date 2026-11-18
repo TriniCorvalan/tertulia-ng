@@ -1,4 +1,263 @@
-/* Design system Tertulia — se completa en el paso de branding */
+:root {
+  --color-ink: #1a2421;
+  --color-ink-soft: #3d4a45;
+  --color-muted: #5f6f69;
+  --color-paper: #f3f6f4;
+  --color-paper-deep: #e4ebe7;
+  --color-teal: #0f6b5c;
+  --color-teal-deep: #0a4f44;
+  --color-teal-mist: rgba(15, 107, 92, 0.12);
+  --color-amber: #c47a1a;
+  --color-amber-soft: #f0d9b0;
+  --color-danger: #a33b2c;
+  --color-line: rgba(26, 36, 33, 0.12);
+  --font-display: 'Fraunces', 'Georgia', serif;
+  --font-body: 'Source Sans 3', 'Segoe UI', sans-serif;
+  --radius: 0.75rem;
+  --shadow-soft: 0 12px 40px rgba(26, 36, 33, 0.08);
+  --space-page: clamp(1.25rem, 3vw, 2.5rem);
+  --header-h: 4.25rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   min-height: 100vh;
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(15, 107, 92, 0.16), transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, rgba(196, 122, 26, 0.14), transparent 50%),
+    linear-gradient(180deg, #f7faf8 0%, var(--color-paper) 45%, var(--color-paper-deep) 100%);
+  background-attachment: fixed;
+}
+
+h1,
+h2,
+h3,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.navbar-brand {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+a {
+  color: var(--color-teal-deep);
+}
+
+a:hover {
+  color: var(--color-teal);
+}
+
+.text-secondary {
+  color: var(--color-muted) !important;
+}
+
+/* Header */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  backdrop-filter: blur(12px);
+  background: rgba(247, 250, 248, 0.88);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.app-header .navbar {
+  min-height: var(--header-h);
+}
+
+.app-header .navbar-brand {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--color-teal-deep);
+}
+
+.app-header .nav-link {
+  font-weight: 500;
+  color: var(--color-ink-soft);
+}
+
+.app-header .nav-link.active,
+.app-header .nav-link:hover {
+  color: var(--color-teal);
+}
+
+.app-header .btn-outline-secondary {
+  border-color: var(--color-line);
+  color: var(--color-ink-soft);
+}
+
+.app-header .btn-outline-secondary:hover {
+  background: var(--color-teal);
+  border-color: var(--color-teal);
+  color: #fff;
+}
+
+/* Footer */
+.app-footer {
+  border-top: 1px solid var(--color-line);
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--color-muted);
+}
+
+/* Page shell */
+.app-main {
+  padding-block: var(--space-page);
+}
+
+.page-kicker {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-amber);
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+}
+
+.page-lead {
+  max-width: 40rem;
+  color: var(--color-muted);
+  margin-bottom: 0;
+}
+
+/* Category tiles (interaction surface) */
+.tertulia-tile {
+  display: block;
+  height: 100%;
+  padding: 1.35rem 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.tertulia-tile:hover {
+  transform: translateY(-3px);
+  border-color: rgba(15, 107, 92, 0.35);
+  box-shadow: 0 16px 44px rgba(15, 107, 92, 0.14);
+  color: inherit;
+}
+
+.tertulia-tile h2 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  margin-bottom: 0.4rem;
+  color: var(--color-teal-deep);
+}
+
+/* Forms & buttons */
+.form-control,
+.form-select {
+  border-color: var(--color-line);
+  border-radius: calc(var(--radius) - 0.15rem);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 0.2rem var(--color-teal-mist);
+}
+
+.btn-dark {
+  --bs-btn-bg: var(--color-teal);
+  --bs-btn-border-color: var(--color-teal);
+  --bs-btn-hover-bg: var(--color-teal-deep);
+  --bs-btn-hover-border-color: var(--color-teal-deep);
+  --bs-btn-active-bg: var(--color-teal-deep);
+  --bs-btn-active-border-color: var(--color-teal-deep);
+  border-radius: 999px;
+  padding-inline: 1.15rem;
+  font-weight: 600;
+}
+
+.btn-outline-dark {
+  --bs-btn-color: var(--color-teal-deep);
+  --bs-btn-border-color: var(--color-teal);
+  --bs-btn-hover-bg: var(--color-teal);
+  --bs-btn-hover-border-color: var(--color-teal);
+  --bs-btn-hover-color: #fff;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.btn-outline-danger {
+  border-radius: 999px;
+}
+
+.btn-outline-warning {
+  --bs-btn-color: #8a5a10;
+  --bs-btn-border-color: var(--color-amber);
+  --bs-btn-hover-bg: var(--color-amber);
+  --bs-btn-hover-border-color: var(--color-amber);
+  --bs-btn-hover-color: #fff;
+  border-radius: 999px;
+}
+
+.alert {
+  border-radius: var(--radius);
+  border: none;
+}
+
+.list-group-item {
+  background: transparent;
+  border-color: var(--color-line);
+}
+
+.table {
+  --bs-table-bg: rgba(255, 255, 255, 0.55);
+}
+
+.badge.text-bg-success {
+  background-color: var(--color-teal) !important;
+}
+
+.badge.text-bg-danger {
+  background-color: var(--color-danger) !important;
+}
+
+code {
+  color: var(--color-teal-deep);
+  background: var(--color-teal-mist);
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.3rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tertulia-tile {
+    transition: none;
+  }
+
+  .tertulia-tile:hover {
+    transform: none;
+  }
 }

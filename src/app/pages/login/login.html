@@ -1,10 +1,9 @@
 <section class="row justify-content-center">
   <div class="col-12 col-md-8 col-lg-5">
-    <h1 class="h3 mb-3">Iniciar sesión</h1>
-    <p class="text-secondary">
+    <span class="page-kicker">Cuenta</span>
+    <h1 class="page-title h3">Iniciar sesión</h1>
+    <p class="page-lead mb-3">
       Demo admin: <code>admin&#64;foro.cl</code> / <code>Admin123!</code>
-      <br>
-      Demo user: <code>ana&#64;foro.cl</code> / <code>User123!</code>
     </p>
 
     @if (error()) {
@@ -22,7 +21,7 @@
           autocomplete="username"
         />
         @if (form.controls.email.invalid && form.controls.email.touched) {
-          <div class="form-text text-danger">Ingresa un correo válido.</div>
+          <div class="form-text text-danger">Ingresá un correo válido.</div>
         }
       </div>
       <div class="mb-3">
@@ -38,7 +37,7 @@
           <div class="form-text text-danger">La contraseña es obligatoria.</div>
         }
       </div>
-      <div class="d-flex flex-wrap gap-2 align-items-center">
+      <div class="d-flex flex-wrap gap-3 align-items-center">
         <button class="btn btn-dark" type="submit" [disabled]="submitting()">
           {{ submitting() ? 'Ingresando…' : 'Entrar' }}
         </button>

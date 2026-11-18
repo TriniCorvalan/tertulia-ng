@@ -1,0 +1,41 @@
+.page-title {
+  animation: tertulia-fade-up 0.55s ease both;
+}
+
+.page-lead {
+  max-width: none;
+  animation: tertulia-fade-up 0.55s ease 0.08s both;
+}
+
+.tertulia-tile {
+  animation: tertulia-fade-up 0.5s ease both;
+}
+
+.tertulia-tile:nth-child(1) {
+  animation-delay: 0.12s;
+}
+.tertulia-tile:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.tertulia-tile:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+@keyframes tertulia-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-title,
+  .page-lead,
+  .tertulia-tile {
+    animation: none;
+  }
+}

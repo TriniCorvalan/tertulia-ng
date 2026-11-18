@@ -2,8 +2,9 @@
   <div class="col-12">
     <a routerLink="/inicio" class="small text-decoration-none">&larr; Categorías</a>
     @if (categoria(); as cat) {
-      <h1 class="h3 mt-2 mb-1">{{ cat.nombre }}</h1>
-      <p class="text-secondary">{{ cat.descripcion }}</p>
+      <span class="page-kicker d-block mt-2">Categoría</span>
+      <h1 class="page-title h3">{{ cat.nombre }}</h1>
+      <p class="page-lead">{{ cat.descripcion }}</p>
     }
   </div>
 
