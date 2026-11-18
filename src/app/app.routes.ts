@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+import { authGuard } from './core/guards/auth.guard';
 import { Categoria } from './pages/categoria/categoria';
 import { Home } from './pages/home/home';
 import { Login } from './pages/login/login';
@@ -15,9 +16,9 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'registro', component: Registro },
   { path: 'recuperar-password', component: RecuperarPassword },
-  { path: 'perfil', component: Perfil },
+  { path: 'perfil', component: Perfil, canActivate: [authGuard] },
   { path: 'categorias/:id', component: Categoria },
-  { path: 'temas/nuevo', component: TemaNuevo },
+  { path: 'temas/nuevo', component: TemaNuevo, canActivate: [authGuard] },
   { path: 'temas/:id', component: TemaDetalle },
   { path: '**', redirectTo: 'inicio' },
 ];
