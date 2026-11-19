@@ -2,6 +2,7 @@
 export const environment = {
   production: true,
   authApiUrl: '',
-  foroApiUrl: '',
+  /** Prefijo para no chocar con rutas Angular /categorias y /temas. */
+  foroApiUrl: '/api',
   moderacionApiUrl: '',
 };

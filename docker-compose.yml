@@ -1,0 +1,52 @@
+services:
+  ms-usuarios:
+    build:
+      context: ../ms-usuarios
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    env_file: .env
+    environment:
+      TNS_ADMIN: /app/wallet
+    volumes:
+      - ${ORACLE_WALLET_DIR:-../library/Wallet_TG243BR3UDTANBR0}:/app/wallet:ro
+    restart: unless-stopped
+
+  ms-foro:
+    build:
+      context: ../ms-foro
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    env_file: .env
+    environment:
+      TNS_ADMIN: /app/wallet
+    volumes:
+      - ${ORACLE_WALLET_DIR:-../library/Wallet_TG243BR3UDTANBR0}:/app/wallet:ro
+    restart: unless-stopped
+
+  ms-moderacion:
+    build:
+      context: ../ms-moderacion
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    env_file: .env
+    environment:
+      TNS_ADMIN: /app/wallet
+    volumes:
+      - ${ORACLE_WALLET_DIR:-../library/Wallet_TG243BR3UDTANBR0}:/app/wallet:ro
+    restart: unless-stopped
+
+  tertulia-ng:
+    build: .
+    ports:
+      - "8088:80"
+    volumes:
+      # Compose local: proxies a los 3 MS (la imagen ECR/EC2 usa nginx.prod.conf).
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - ms-usuarios
+      - ms-foro
+      - ms-moderacion
+    restart: unless-stopped
