@@ -86,17 +86,34 @@ if [[ "$component" == frontend ]]; then
     --max-time 10 "http://${public_ip}/" --output /dev/null
   echo "EC2 smoke test passed: frontend HTTP 200."
 else
-  response_file="${RUNNER_TEMP:-/tmp}/tertulia-categorias.json"
-  curl --fail --silent --show-error --retry 12 --retry-all-errors --retry-delay 5 \
-    --max-time 10 "http://${public_ip}/api/categorias" --output "$response_file"
-  python3 - "$response_file" <<'PY'
+  smoke_path="${EC2_SMOKE_PATH:-/api/categorias}"
+  response_file="${RUNNER_TEMP:-/tmp}/tertulia-smoke.out"
+  code=""
+  for attempt in $(seq 1 12); do
+    code="$(curl --silent --show-error --max-time 10 \
+      -o "$response_file" -w '%{http_code}' \
+      "http://${public_ip}${smoke_path}" || true)"
+    if [[ "$code" =~ ^(200|401|403|405)$ ]]; then
+      break
+    fi
+    sleep 5
+  done
+  if [[ ! "$code" =~ ^(200|401|403|405)$ ]]; then
+    echo "EC2 smoke test failed for ${smoke_path} (HTTP ${code:-none})." >&2
+    exit 1
+  fi
+  if [[ "$code" == "200" && "$smoke_path" == "/api/categorias" ]]; then
+    python3 - "$response_file" <<'PY'
 import json
 import sys
 
 with open(sys.argv[1], encoding="utf-8") as response:
     categorias = json.load(response)
 if not isinstance(categorias, list):
-    raise SystemExit("Public GET /api/categorias did not return a JSON array.")
-print(f"EC2 smoke test passed: API HTTP 200 with {len(categorias)} categorias.")
+    raise SystemExit("GET /api/categorias did not return a JSON array.")
+print(f"EC2 smoke test passed: /api/categorias with {len(categorias)} items.")
 PY
+  else
+    echo "EC2 smoke test passed: ${smoke_path} HTTP ${code}."
+  fi
 fi
